@@ -33,7 +33,7 @@ class EtherscanAPI:
         
         Args:
             api_key: Your Etherscan API key
-            chainid: The chain ID (1 for Ethereum mainnet, 5 for Goerli testnet, etc.)
+            chainid: The chain ID (1 for Ethereum mainnet, 11155111 for Sepolia testnet, etc.)
         """
         self.api_key = api_key
         self.chainid = chainid
