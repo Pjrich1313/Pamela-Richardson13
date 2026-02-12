@@ -77,10 +77,11 @@ params = {
 ## Chain ID Reference
 
 - **1**: Ethereum Mainnet
-- **5**: Goerli Testnet (deprecated)
-- **11155111**: Sepolia Testnet
+- **11155111**: Sepolia Testnet (recommended for testing)
 - **137**: Polygon Mainnet
 - **80001**: Polygon Mumbai Testnet
+
+**Note**: Goerli testnet (chainid: 5) has been deprecated. Use Sepolia for testing new projects.
 
 ## JSON Response Handling
 

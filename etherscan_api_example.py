@@ -6,6 +6,7 @@ This script demonstrates correct usage of the Etherscan v2 API with the required
 'chainid' parameter. It includes examples for:
 1. Fetching gas prices
 2. Fetching token balances
+3. Fetching ETH balances
 
 Note: Replace 'YourApiKeyToken' with your actual Etherscan API key.
 You can get a free API key from https://etherscan.io/myapikey
@@ -203,8 +204,9 @@ def format_gas_prices(data: Dict) -> str:
         f"Last Block:        {result.get('LastBlock', 'N/A')}",
     ]
     
-    if "suggestBaseFee" in result:
-        lines.append(f"Suggested Base Fee: {result['suggestBaseFee']} Gwei")
+    suggest_base_fee = result.get('suggestBaseFee')
+    if suggest_base_fee is not None:
+        lines.append(f"Suggested Base Fee: {suggest_base_fee} Gwei")
     
     return "\n".join(lines)
 
@@ -290,8 +292,8 @@ def main():
     print("✓ Error handling is implemented for network and parsing issues")
     print("\nChain IDs Reference:")
     print("  - 1: Ethereum Mainnet")
-    print("  - 5: Goerli Testnet")
     print("  - 11155111: Sepolia Testnet")
+    print("  Note: Goerli testnet (chainid: 5) has been deprecated")
     print("=" * 60)
 
 
