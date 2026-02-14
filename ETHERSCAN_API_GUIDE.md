@@ -24,12 +24,17 @@ pip install requests
 
 1. Get your API key from [Etherscan](https://etherscan.io/myapikey)
 
-2. Replace `'YourApiKeyToken'` in the script with your actual API key:
+2. Export your API key so the script can read it automatically:
+   ```bash
+   export ETHERSCAN_API_KEY="YOUR_ACTUAL_API_KEY"
+   ```
+
+3. (Optional) If you prefer to pass the key directly, you can still do so:
    ```python
    api = EtherscanAPI(api_key="YOUR_ACTUAL_API_KEY", chainid=1)
    ```
 
-3. Run the script:
+4. Run the script:
    ```bash
    python3 etherscan_api_example.py
    ```
