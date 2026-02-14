@@ -8,10 +8,11 @@ This script demonstrates correct usage of the Etherscan v2 API with the required
 2. Fetching token balances
 3. Fetching ETH balances
 
-Note: Replace 'YourApiKeyToken' with your actual Etherscan API key.
-You can get a free API key from https://etherscan.io/myapikey
+Note: Set the ETHERSCAN_API_KEY environment variable with your actual
+Etherscan API key. You can get a free API key from https://etherscan.io/myapikey
 """
 
+import os
 import requests
 import json
 from typing import Dict, Optional
@@ -27,7 +28,7 @@ class EtherscanAPI:
         base_url (str): The base URL for Etherscan API
     """
     
-    def __init__(self, api_key: str = "YourApiKeyToken", chainid: int = 1):
+    def __init__(self, api_key: Optional[str] = None, chainid: int = 1):
         """
         Initialize the Etherscan API client.
         
@@ -35,7 +36,9 @@ class EtherscanAPI:
             api_key: Your Etherscan API key
             chainid: The chain ID (1 for Ethereum mainnet, 11155111 for Sepolia testnet, etc.)
         """
-        self.api_key = api_key
+        self.api_key = api_key or os.getenv("ETHERSCAN_API_KEY")
+        if not self.api_key:
+            raise ValueError("Etherscan API key is required. Set the ETHERSCAN_API_KEY environment variable.")
         self.chainid = chainid
         self.base_url = "https://api.etherscan.io/api"
         
@@ -233,16 +236,21 @@ def main():
     """
     Main function demonstrating Etherscan v2 API usage.
     """
+    api_key = os.getenv("ETHERSCAN_API_KEY")
+    if not api_key:
+        print("✗ No API key found. Please set the ETHERSCAN_API_KEY environment variable.")
+        return
+
     print("=" * 60)
     print("Etherscan v2 API Example - Proper chainid Parameter Usage")
     print("=" * 60)
     
     # Initialize API client with chainid=1 (Ethereum mainnet)
     # IMPORTANT: The chainid parameter is required for v2 API
-    api = EtherscanAPI(api_key="YourApiKeyToken", chainid=1)
+    api = EtherscanAPI(api_key=api_key, chainid=1)
     
     print(f"\nUsing chainid: {api.chainid} (Ethereum Mainnet)")
-    print("\nNote: Replace 'YourApiKeyToken' with your actual API key for real usage.\n")
+    print("\nUsing API key from environment variable ETHERSCAN_API_KEY.\n")
     
     # Example 1: Fetch gas prices
     print("\n" + "-" * 60)
