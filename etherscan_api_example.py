@@ -38,6 +38,11 @@ class EtherscanAPI:
         self.api_key = api_key
         self.chainid = chainid
         self.base_url = "https://api.etherscan.io/api"
+        self.session = requests.Session()
+        self.session.params.update({
+            "apikey": self.api_key,
+            "chainid": self.chainid  # Required for v2 API
+        })
         
     def get_gas_prices(self) -> Optional[Dict]:
         """
@@ -63,13 +68,11 @@ class EtherscanAPI:
         """
         params = {
             "module": "gastracker",
-            "action": "gasoracle",
-            "apikey": self.api_key,
-            "chainid": self.chainid  # Required for v2 API
+            "action": "gasoracle"
         }
         
         try:
-            response = requests.get(self.base_url, params=params, timeout=10)
+            response = self.session.get(self.base_url, params=params, timeout=10)
             response.raise_for_status()
             data = response.json()
             
@@ -111,13 +114,11 @@ class EtherscanAPI:
             "action": "tokenbalance",
             "contractaddress": contract_address,
             "address": wallet_address,
-            "tag": "latest",
-            "apikey": self.api_key,
-            "chainid": self.chainid  # Required for v2 API
+            "tag": "latest"
         }
         
         try:
-            response = requests.get(self.base_url, params=params, timeout=10)
+            response = self.session.get(self.base_url, params=params, timeout=10)
             response.raise_for_status()
             data = response.json()
             
@@ -157,13 +158,11 @@ class EtherscanAPI:
             "module": "account",
             "action": "balance",
             "address": wallet_address,
-            "tag": "latest",
-            "apikey": self.api_key,
-            "chainid": self.chainid  # Required for v2 API
+            "tag": "latest"
         }
         
         try:
-            response = requests.get(self.base_url, params=params, timeout=10)
+            response = self.session.get(self.base_url, params=params, timeout=10)
             response.raise_for_status()
             data = response.json()
             
