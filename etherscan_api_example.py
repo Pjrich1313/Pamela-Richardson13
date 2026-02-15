@@ -8,10 +8,14 @@ This script demonstrates correct usage of the Etherscan v2 API with the required
 2. Fetching token balances
 3. Fetching ETH balances
 
-Note: Replace 'YourApiKeyToken' with your actual Etherscan API key.
+Security: The API key is loaded from the ETHERSCAN_API_KEY environment variable.
+Set this environment variable before running the script:
+    export ETHERSCAN_API_KEY='your_api_key_here'
+
 You can get a free API key from https://etherscan.io/myapikey
 """
 
+import os
 import requests
 import json
 from typing import Dict, Optional
@@ -21,21 +25,34 @@ class EtherscanAPI:
     """
     A simple wrapper for Etherscan v2 API calls.
     
+    The API key is securely loaded from the ETHERSCAN_API_KEY environment variable.
+    
     Attributes:
-        api_key (str): Your Etherscan API key
+        api_key (str): Your Etherscan API key (loaded from environment)
         chainid (int): The chain ID (1 for Ethereum mainnet)
         base_url (str): The base URL for Etherscan API
     """
     
-    def __init__(self, api_key: str = "YourApiKeyToken", chainid: int = 1):
+    def __init__(self, chainid: int = 1):
         """
         Initialize the Etherscan API client.
         
+        The API key is loaded from the ETHERSCAN_API_KEY environment variable.
+        Raises a ValueError if the environment variable is not set.
+        
         Args:
-            api_key: Your Etherscan API key
             chainid: The chain ID (1 for Ethereum mainnet, 11155111 for Sepolia testnet, etc.)
+            
+        Raises:
+            ValueError: If ETHERSCAN_API_KEY environment variable is not set
         """
-        self.api_key = api_key
+        self.api_key = os.environ.get("ETHERSCAN_API_KEY")
+        if not self.api_key:
+            raise ValueError(
+                "ETHERSCAN_API_KEY environment variable is not set. "
+                "Please set it before running this script: "
+                "export ETHERSCAN_API_KEY='your_api_key_here'"
+            )
         self.chainid = chainid
         self.base_url = "https://api.etherscan.io/api"
         
@@ -239,10 +256,11 @@ def main():
     
     # Initialize API client with chainid=1 (Ethereum mainnet)
     # IMPORTANT: The chainid parameter is required for v2 API
-    api = EtherscanAPI(api_key="YourApiKeyToken", chainid=1)
+    # API key is securely loaded from ETHERSCAN_API_KEY environment variable
+    api = EtherscanAPI(chainid=1)
     
     print(f"\nUsing chainid: {api.chainid} (Ethereum Mainnet)")
-    print("\nNote: Replace 'YourApiKeyToken' with your actual API key for real usage.\n")
+    print("API key loaded from ETHERSCAN_API_KEY environment variable.\n")
     
     # Example 1: Fetch gas prices
     print("\n" + "-" * 60)
