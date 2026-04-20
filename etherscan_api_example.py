@@ -16,6 +16,7 @@ You can get a free API key from https://etherscan.io/myapikey
 """
 
 import os
+import sys
 import requests
 import json
 from typing import Dict, Optional
@@ -246,7 +247,7 @@ def format_balance(balance_wei: str, decimals: int = 18) -> str:
         return "Invalid balance"
 
 
-def main():
+def main() -> int:
     """
     Main function demonstrating Etherscan v2 API usage.
     """
@@ -257,7 +258,11 @@ def main():
     # Initialize API client with chainid=1 (Ethereum mainnet)
     # IMPORTANT: The chainid parameter is required for v2 API
     # API key is securely loaded from ETHERSCAN_API_KEY environment variable
-    api = EtherscanAPI(chainid=1)
+    try:
+        api = EtherscanAPI(chainid=1)
+    except ValueError as e:
+        print(f"✗ {e}")
+        return 1
     
     print(f"\nUsing chainid: {api.chainid} (Ethereum Mainnet)")
     print("API key loaded from ETHERSCAN_API_KEY environment variable.\n")
@@ -313,7 +318,8 @@ def main():
     print("  - 11155111: Sepolia Testnet")
     print("  Note: Goerli testnet (chainid: 5) has been deprecated")
     print("=" * 60)
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
